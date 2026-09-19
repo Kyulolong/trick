@@ -1,6 +1,6 @@
 {
-  "name": "규로롱 매직쇼",
-  "short_name": "매직쇼",
+  "name": "아이스브레이커",
+  "short_name": "아이스브레이커",
   "description": "준비물도 연습도 없는 아이스브레이킹 게임 5선",
   "start_url": "/trick/",
   "scope": "/trick/",
@@ -9,8 +9,21 @@
   "theme_color": "#070b07",
   "lang": "ko-KR",
   "icons": [
-    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

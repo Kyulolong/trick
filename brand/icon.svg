@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 금은 반드시 얼음 안으로 잘라낸다. 배경이 단색이 아닌 곳(OG 카드의 글로우)에
+       쓰면 삐져나온 획이 그대로 보인다. -->
+  <defs><clipPath id="ice"><rect x="116" y="116" width="280" height="280" rx="46"/></clipPath></defs>
   <rect width="512" height="512" rx="112" fill="#070b07"/>
-  <!-- 실크해트. 통은 챙보다 좁고 길어야 모자로 읽힌다 — 반대가 되면 모니터가 된다. -->
-  <rect x="171" y="132" width="170" height="206" rx="12" fill="#8FFF00"/>
-  <rect x="171" y="282" width="170" height="44" fill="#070b07" opacity=".5"/>
-  <rect x="76"  y="328" width="360" height="52" rx="26" fill="#8FFF00"/>
-  <!-- 스파크. 통과 27px 떨어뜨려 32px 에서도 붙어 보이지 않게 한다. -->
-  <path d="M408 128 l13 27 27 13 -27 13 -13 27 -13-27 -27-13 27-13 z" fill="#8FFF00"/>
+  <rect x="116" y="116" width="280" height="280" rx="46" fill="#8FFF00"/>
+  <path d="M232 96 L280 198 L212 256 L276 318 L230 416" clip-path="url(#ice)"
+        fill="none" stroke="#070b07" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M424 120 l12 26 26 12 -26 12 -12 26 -12-26 -26-12 26-12 z" fill="#8FFF00"/>
 </svg>

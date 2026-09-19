@@ -1,7 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- 16px 광학 보정판. 스파크와 모자 띠를 빼고 두 덩어리만 남긴다.
-       원본을 그냥 줄이면 스파크가 통에 붙고 띠가 통을 갈라서 뭉갠다. -->
+  <!-- 16px 광학 보정판. 튀는 조각을 빼고 금을 굵혀 두 덩어리만 남긴다. -->
+  <defs><clipPath id="ice16"><rect x="100" y="100" width="312" height="312" rx="50"/></clipPath></defs>
   <rect width="512" height="512" rx="112" fill="#070b07"/>
-  <rect x="181" y="128" width="150" height="200" rx="10" fill="#8FFF00"/>
-  <rect x="56"  y="318" width="400" height="60" rx="30" fill="#8FFF00"/>
+  <rect x="100" y="100" width="312" height="312" rx="50" fill="#8FFF00"/>
+  <path d="M236 80 L288 196 L208 262 L280 330 L232 432" clip-path="url(#ice16)"
+        fill="none" stroke="#070b07" stroke-width="46" stroke-linejoin="round" stroke-linecap="round"/>
 </svg>
