@@ -107,12 +107,9 @@
 
   /* ── home ── */
   .hero { text-align: center; padding: 26px 0 20px; }
-  .brandline {
-    display: inline-flex; align-items: center; gap: 7px;
-    font-size: 12px; font-weight: 700; color: var(--sub);
-    letter-spacing: .04em; margin-bottom: 10px;
-  }
-  .brandline .dot { width: 13px; height: 13px; flex: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M5.6 3.2 H26.4 L18.39 21.20 L12.37 21.20 L18.11 8.3 H5.6 Z' fill='%2314180F' stroke='%2314180F' stroke-width='3.0' stroke-linejoin='round'/%3E%3Ccircle cx='15.38' cy='27.65' r='3.85' fill='%2314180F'/%3E%3Cpath d='M5.6 3.2 H26.4 L18.39 21.20 L12.37 21.20 L18.11 8.3 H5.6 Z' fill='%238FFF00' stroke='%238FFF00' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='15.38' cy='27.65' r='3.1' fill='%238FFF00'/%3E%3C/svg%3E") no-repeat center / contain; }
+  .hero h1 .dot {
+    display: inline-block; width: 21px; height: 21px; margin-right: 9px;
+    vertical-align: -1px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M5.6 3.2 H26.4 L18.39 21.20 L12.37 21.20 L18.11 8.3 H5.6 Z' fill='%2314180F' stroke='%2314180F' stroke-width='3.0' stroke-linejoin='round'/%3E%3Ccircle cx='15.38' cy='27.65' r='3.85' fill='%2314180F'/%3E%3Cpath d='M5.6 3.2 H26.4 L18.39 21.20 L12.37 21.20 L18.11 8.3 H5.6 Z' fill='%238FFF00' stroke='%238FFF00' stroke-width='1.5' stroke-linejoin='round'/%3E%3Ccircle cx='15.38' cy='27.65' r='3.1' fill='%238FFF00'/%3E%3C/svg%3E") no-repeat center / contain; }
   .hero .hat { font-size: 52px; filter: drop-shadow(0 0 24px rgba(143,255,0,.45)); }
   .hero h1 { font-size: 27px; font-weight: 900; letter-spacing: -0.5px; margin-top: 8px; }
   .hero h1 em { font-style: normal; color: var(--neon); text-shadow: 0 0 18px rgba(143,255,0,.5); }
@@ -453,9 +450,8 @@ function goHome() {
   setHeader(null);
   const s = stage(`
     <div class="hero">
-      <p class="brandline"><span class="dot" aria-hidden="true"></span>규로롱</p>
       <div class="hat">🎩</div>
-      <h1>규로롱 <em>매직쇼</em></h1>
+      <h1><span class="dot" aria-hidden="true"></span>규로롱 <em>매직쇼</em></h1>
       <p>폰 하나로 시작하는 아이스브레이킹 5선<br>우와 3 · 게임 2 — 연습 없이, 실패 없이.</p>
     </div>
     <div class="tricklist">
