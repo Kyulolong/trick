@@ -116,6 +116,18 @@
     vertical-align: -3px;
     background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='463 238 1043 1043' fill='none'><path d='M1246 1159C1225 1127 1196.5 1082 1192.5 1058.5C1192.5 1048.45 1195.23 1041 1209.5 1019C1288 898 1276 800 1240 694.5C1235.39 681 1225.5 677.134 1209 688C1190.23 700.36 1167.04 714.735 1131 740C1122 746.31 1117.5 753.5 1120 763.5C1159.5 875.931 1091.66 984.722 993.5 1036.92C889.103 1092.44 743 1075 670 947.776C596 805 657.681 686.49 753 627.997C854.896 565.468 993.5 578.5 1085 692C1091.87 700.523 1096.5 704.485 1106 699L1196.5 641.5C1205 636.5 1202.6 630 1196.5 621C1037.5 386.5 776.404 412.051 628 549C498.441 668.558 467 877 549.5 1011.5C702.279 1260.58 959 1208 1036.5 1163.41C1060.54 1149.58 1076.48 1159.2 1090.5 1163.41C1159 1184 1223.67 1221.5 1246 1200.5C1262.84 1184.66 1253.72 1170.76 1246.21 1159.32L1246 1159Z' fill='%23edebf5'/><circle cx='1338' cy='717' r='52.6968' fill='%238FFF00'/><path d='M1247.29 591.69C1247.13 618.028 1268.35 639.508 1294.69 639.667C1305.71 639.734 1315.89 636.055 1324 629.824L1454.5 502C1463 493.5 1477.5 463 1451.5 437C1430.7 416.2 1404.5 420.5 1391.5 430.5L1259.6 560C1252.01 568.388 1247.36 579.49 1247.29 591.69Z' fill='%238FFF00'/><path d='M1196.79 531.901C1224.85 532.071 1247.73 509.466 1247.9 481.411L1247.9 359C1245.29 344 1231.43 314 1196.79 314C1162.16 314 1148.7 344 1146.3 359L1146.3 480.797C1146.13 508.852 1168.74 531.732 1196.79 531.901Z' fill='%238FFF00'/></svg>") no-repeat center / contain;
   }
+  .hero .hat { font-size: 52px; filter: drop-shadow(0 0 24px rgba(143,255,0,.45)); }
+  .hero h1 { font-size: 27px; font-weight: 900; letter-spacing: -0.5px; margin-top: 8px; }
+  .hero h1 em { font-style: normal; color: var(--neon); text-shadow: 0 0 18px rgba(143,255,0,.5); }
+  .hero p { color: var(--sub); font-size: 13.5px; margin-top: 7px; line-height: 1.5; }
+  .tricklist { display: flex; flex-direction: column; gap: 10px; }
+  .tcard {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 18px; padding: 14px 16px; cursor: pointer;
+    transition: transform .08s ease, border-color .2s;
+    text-align: left; width: 100%; color: var(--text);
+  }
   .tcard:active { transform: scale(.975); border-color: var(--neon-dim); }
   .tcard .em { font-size: 30px; flex: none; width: 44px; text-align: center; }
   .tcard .info { flex: 1; min-width: 0; }
