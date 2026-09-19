@@ -1,0 +1,16 @@
+{
+  "name": "규로롱 매직쇼",
+  "short_name": "매직쇼",
+  "description": "준비물도 연습도 없는 아이스브레이킹 게임 5선",
+  "start_url": "/trick/",
+  "scope": "/trick/",
+  "display": "standalone",
+  "background_color": "#070b07",
+  "theme_color": "#070b07",
+  "lang": "ko-KR",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 16px 광학 보정판. 스파크와 모자 띠를 빼고 두 덩어리만 남긴다.
+       원본을 그냥 줄이면 스파크가 통에 붙고 띠가 통을 갈라서 뭉갠다. -->
+  <rect width="512" height="512" rx="112" fill="#070b07"/>
+  <rect x="181" y="128" width="150" height="200" rx="10" fill="#8FFF00"/>
+  <rect x="56"  y="318" width="400" height="60" rx="30" fill="#8FFF00"/>
+</svg>

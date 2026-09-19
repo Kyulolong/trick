@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#070b07"/>
+  <!-- 실크해트. 통은 챙보다 좁고 길어야 모자로 읽힌다 — 반대가 되면 모니터가 된다. -->
+  <rect x="171" y="132" width="170" height="206" rx="12" fill="#8FFF00"/>
+  <rect x="171" y="282" width="170" height="44" fill="#070b07" opacity=".5"/>
+  <rect x="76"  y="328" width="360" height="52" rx="26" fill="#8FFF00"/>
+  <!-- 스파크. 통과 27px 떨어뜨려 32px 에서도 붙어 보이지 않게 한다. -->
+  <path d="M408 128 l13 27 27 13 -27 13 -13 27 -13-27 -27-13 27-13 z" fill="#8FFF00"/>
+</svg>
