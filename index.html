@@ -1046,6 +1046,16 @@ const TRICKS = [
 ];
 
 goHome();
+
+/* 오프라인 캐시. 한 번 열어두면 와이파이 없는 자리에서도 다섯 게임이 전부 돈다.
+   주소는 매니페스트처럼 슬러그를 손으로 적는다 — 끝 슬래시 없는 /trick 에서
+   상대경로 'sw.js' 는 /sw.js 로 풀려 엉뚱한 곳을 부른다.
+   슬러그 밖(file:// · 로컬 docker 의 루트)에서는 sw.js 가 그 주소에 없으니 건너뛴다. */
+if ('serviceWorker' in navigator && location.pathname.startsWith('/trick')) {
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('/trick/sw.js', { scope: '/trick/' }).catch(() => {});
+  });
+}
 </script>
 </body>
 </html>

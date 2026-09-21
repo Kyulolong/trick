@@ -37,11 +37,18 @@
 ```
 index.html                모든 것 (HTML · CSS · JS)
 manifest.webmanifest      start_url · scope 는 /trick/
+sw.js                     오프라인 캐시 (한 번 열면 네트워크 없이도 동작)
 icon-16/32/180/512.png    탭 · 홈 화면 아이콘
 og.png                    1200×630 공유 카드
 brand/                    아이콘 SVG 원본 (서빙하지 않는다)
 Dockerfile · nginx.conf   Coolify 배포
 ```
+
+### 오프라인
+
+`sw.js` 가 index.html 과 아이콘을 캐시한다. 외부 의존성이 없어서 이것만으로 다섯 게임이 전부 오프라인에서 돈다.
+페이지는 네트워크 우선(3초 넘으면 캐시)이라 배포는 바로 보인다. 앱 코드만 고친 배포에서는 `sw.js` 를 건드릴 필요가 없고,
+**아이콘·매니페스트를 바꿨을 때만** `sw.js` 의 `CACHE` 버전을 올린다.
 
 ### 로컬에서 보기
 
