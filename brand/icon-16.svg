@@ -1,8 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- 16px 광학 보정판. 튀는 조각을 빼고 금을 굵혀 두 덩어리만 남긴다. -->
-  <defs><clipPath id="ice16"><rect x="100" y="100" width="312" height="312" rx="50"/></clipPath></defs>
-  <rect width="512" height="512" rx="112" fill="#070b07"/>
-  <rect x="100" y="100" width="312" height="312" rx="50" fill="#8FFF00"/>
-  <path d="M236 80 L288 196 L208 262 L280 330 L232 432" clip-path="url(#ice16)"
-        fill="none" stroke="#070b07" stroke-width="46" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- 16px 광학 보정판. 광택·부스러기·후광을 빼고, 큐브를 키우고 금을 굵혀
+       '밝은 두 조각과 그 사이 틈 + 형광 한 점'만 남긴다. -->
+  <rect width="512" height="512" rx="112" fill="#4a26c4"/>
+  <g stroke-linejoin="round" stroke-width="28">
+    <g transform="translate(-26 6)">
+      <path d="M86 176 L256 78 L236 170 L258 262 Z" fill="#ffffff" stroke="#ffffff"/>
+      <path d="M86 176 L258 262 L234 360 L256 450 L86 352 Z" fill="#cfc4ff" stroke="#cfc4ff"/>
+    </g>
+    <g transform="translate(26 6)">
+      <path d="M256 78 L426 176 L258 262 L236 170 Z" fill="#f1eeff" stroke="#f1eeff"/>
+      <path d="M258 262 L426 176 L426 352 L256 450 L234 360 Z" fill="#8f78f3" stroke="#8f78f3"/>
+    </g>
+  </g>
+  <circle cx="420" cy="84" r="62" fill="#8FFF00"/>
 </svg>

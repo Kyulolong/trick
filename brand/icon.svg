@@ -1,10 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- 금은 반드시 얼음 안으로 잘라낸다. 배경이 단색이 아닌 곳(OG 카드의 글로우)에
-       쓰면 삐져나온 획이 그대로 보인다. -->
-  <defs><clipPath id="ice"><rect x="116" y="116" width="280" height="280" rx="46"/></clipPath></defs>
-  <rect width="512" height="512" rx="112" fill="#070b07"/>
-  <rect x="116" y="116" width="280" height="280" rx="46" fill="#8FFF00"/>
-  <path d="M232 96 L280 198 L212 256 L276 318 L230 416" clip-path="url(#ice)"
-        fill="none" stroke="#070b07" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M424 120 l12 26 26 12 -26 12 -12 26 -12-26 -26-12 26-12 z" fill="#8FFF00"/>
+  <!-- 아이스브레이커 앱 아이콘 — 얼음 큐브가 금을 따라 두 조각으로 벌어지고, 금에서 형광 스파크가 튄다.
+       하우스 규칙(kyulolong-site docs/DESIGN.md): 바탕은 #121019, 보라(#6332EB)는 면으로만,
+       형광(#8FFF00)은 스파크 한 점뿐. 얼음은 형광이 아니라 보라 기운의 흰색으로 칠한다.
+       16px 에서는 이 구성이 뭉개지므로 icon-16.svg 가 따로 있다.
+       큐브는 등각(isometric)이다: 위 꼭짓점 256,120 · 좌우 126/386,195 · 가운데 256,270 · 아래 256,420 -->
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2=".35" y2="1">
+      <stop offset="0" stop-color="#6332EB"/>
+      <stop offset=".6" stop-color="#2a1869"/>
+      <stop offset="1" stop-color="#121019"/>
+    </linearGradient>
+    <radialGradient id="halo" cx=".5" cy=".46" r=".5">
+      <stop offset="0" stop-color="#9a82ff" stop-opacity=".5"/>
+      <stop offset="1" stop-color="#9a82ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#ebe6ff"/>
+    </linearGradient>
+    <linearGradient id="left" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e2dbff"/>
+      <stop offset="1" stop-color="#b9aaff"/>
+    </linearGradient>
+    <linearGradient id="right" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9580f4"/>
+      <stop offset="1" stop-color="#6c52e0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#tile)"/>
+  <circle cx="256" cy="250" r="236" fill="url(#halo)"/>
+  <ellipse cx="256" cy="440" rx="138" ry="16" fill="#07050d" opacity=".5"/>
+
+  <g stroke-linejoin="round" stroke-width="18">
+    <!-- 왼쪽 조각: 윗면 왼쪽 반 + 왼쪽 면 -->
+    <g transform="translate(-18 8) rotate(-5 200 300)">
+      <path d="M126 195 L256 120 L240 160 L268 198 L246 236 L262 270 Z" fill="url(#top)" stroke="#f7f5ff"/>
+      <path d="M126 195 L262 270 L242 312 L268 354 L248 392 L256 420 L126 345 Z" fill="url(#left)" stroke="#d6ceff"/>
+      <!-- 얼음 광택: 면 방향을 따라 누운 띠 두 줄 -->
+      <path d="M150 232 L170 243 L170 318 L150 307 Z" fill="#ffffff" opacity=".7"/>
+      <path d="M182 250 L192 256 L192 300 L182 294 Z" fill="#ffffff" opacity=".45"/>
+    </g>
+    <!-- 오른쪽 조각: 윗면 오른쪽 반 + 오른쪽 면 -->
+    <g transform="translate(18 4) rotate(5 320 300)">
+      <path d="M256 120 L386 195 L262 270 L246 236 L268 198 L240 160 Z" fill="url(#top)" stroke="#f1eeff"/>
+      <path d="M262 270 L386 195 L386 345 L256 420 L248 392 L268 354 L242 312 Z" fill="url(#right)" stroke="#8a74ef"/>
+      <path d="M300 172 L330 190 L316 198 L286 180 Z" fill="#ffffff" opacity=".8"/>
+    </g>
+  </g>
+
+  <!-- 금에서 튀는 형광 스파크 — 이 아이콘의 형광은 이것 하나 -->
+  <path d="M258 30 C263 66 270 74 306 80 C270 86 263 94 258 130 C253 94 246 86 210 80 C246 74 253 66 258 30 Z" fill="#8FFF00"/>
+
+  <!-- 튀는 얼음 부스러기 -->
+  <path d="M170 110 l18 -8 0 20 z" fill="#ebe6ff" opacity=".9"/>
+  <path d="M352 96 l16 8 -14 12 z" fill="#ebe6ff" opacity=".75"/>
+  <path d="M378 142 l10 2 -6 9 z" fill="#ebe6ff" opacity=".55"/>
 </svg>

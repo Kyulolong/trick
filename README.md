@@ -41,6 +41,7 @@ index.html                모든 것 (HTML · CSS · JS)
 manifest.webmanifest      start_url · scope 는 /trick/
 sw.js                     오프라인 캐시 (한 번 열면 네트워크 없이도 동작)
 icon-16/32/180/512.png    탭 · 홈 화면 아이콘
+icon-maskable-512.png     안드로이드 원형 마스크용 (바탕이 끝까지 차고 그림은 가운데 80%)
 og.png                    1200×630 공유 카드
 brand/                    아이콘 SVG 원본 (서빙하지 않는다)
 Dockerfile · nginx.conf   Coolify 배포

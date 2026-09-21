@@ -10,7 +10,7 @@
 
 // 아이콘·매니페스트를 바꿨을 때만 올린다. index.html 은 매번 네트워크에서 새로 받아
 // 캐시를 덮어쓰므로, 앱 코드만 고친 배포에서는 건드리지 않아도 된다.
-const CACHE = 'trick-v1';
+const CACHE = 'trick-v2';
 
 const PRECACHE = [
   './',
@@ -19,6 +19,7 @@ const PRECACHE = [
   'icon-32.png',
   'icon-180.png',
   'icon-512.png',
+  'icon-maskable-512.png',
 ];
 
 // 행사장 와이파이는 "연결은 됐는데 안 오는" 경우가 많다. 끝까지 기다리면
