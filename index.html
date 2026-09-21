@@ -249,14 +249,15 @@
   }
   .ychip:active { transform: scale(.95); }
   .ychip.on { border-color: var(--neon); color: var(--neon); background: rgba(143,255,0,.08); }
-  .ynames { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  /* 1fr 은 최소폭이 내용 크기라 input 의 기본 폭(약 20자)이 열을 밀어 화면 밖으로 넘친다 */
+  .ynames { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
   .yname-in {
-    display: flex; align-items: center; gap: 9px; padding: 0 12px;
+    display: flex; align-items: center; gap: 9px; padding: 0 12px; min-width: 0;
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
   }
   .yname-in::before { content: ''; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--pc); box-shadow: 0 0 8px var(--pc); }
   .yname-in input {
-    flex: 1; min-width: 0; background: none; border: none; outline: none;
+    flex: 1; min-width: 0; width: 100%; background: none; border: none; outline: none;
     color: var(--text); font: inherit; font-size: 16px; font-weight: 700; padding: 12px 0;
   }
   .yresume {
@@ -450,12 +451,16 @@
   .ymini.v1 i.p { width: 6px; height: 6px; background: #c8102e; }
 
   /* 전체 점수표 · 규칙 표 */
-  .ytbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 6px; }
+  /* 고정 레이아웃 — 6명이 여섯 글자 이름을 쓰면 자동 레이아웃은 모달 밖으로 밀려난다 */
+  .ytbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 6px; table-layout: fixed; }
+  .ytbl col.lab { width: 88px; }
   .ytbl th, .ytbl td { padding: 7px 3px; text-align: center; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
-  .ytbl th { font-weight: 900; word-break: keep-all; }
+  .ytbl th { font-weight: 900; font-size: 11.5px; line-height: 1.25; word-break: break-all; vertical-align: bottom; }
   .ytbl td:first-child { text-align: left; color: var(--sub); font-weight: 700; white-space: nowrap; }
+  .ytbl td .ymini { vertical-align: -4px; }
   .ytbl tr.sub td { color: var(--sub); font-size: 11.5px; }
   .ytbl tr.sum td { font-weight: 900; font-size: 14px; color: var(--neon); border-bottom: none; }
+  .ytbl.rules { table-layout: auto; }
   .ytbl.rules td { text-align: left; }
   .ytbl.rules td:last-child { color: var(--text); }
 
@@ -895,6 +900,7 @@ function yTable(G) {
   bg.innerHTML = `<div class="modal">
     <h3><span>📋 전체 점수표</span></h3>
     <table class="ytbl">
+      <colgroup><col class="lab">${G.players.map(() => '<col>').join('')}</colgroup>
       <thead><tr><th></th>${G.players.map(p => `<th style="color:${p.color}">${esc(p.name)}</th>`).join('')}</tr></thead>
       <tbody>
         ${Y_CATS.slice(0, 6).map(c => row(`${yMini(c.up)}${c.up}`, p => p.s[c.k] ?? '·')).join('')}
