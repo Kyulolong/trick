@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="아이스브레이커">
 
 <title>아이스브레이커 — 처음 만난 자리에서 바로 하는 게임 5선</title>
-<meta name="description" content="처음 만난 자리에서 폰 하나로 바로 꺼내는 게임 5선. 사라지는 카드·변화맹·가짜기억·라이어·동시에 지목. 준비물도 연습도 없이.">
+<meta name="description" content="처음 만난 자리에서 폰 하나로 바로 꺼내는 게임 5선. 사라지는 카드·요트 다이스·가짜기억·라이어·동시에 지목. 준비물도 연습도 없이.">
 <link rel="canonical" href="https://kyulolong.com/trick/">
 
 <meta property="og:type" content="website">
@@ -159,7 +159,7 @@
     transition: transform .08s;
   }
   .bigbtn:active { transform: scale(.97); }
-  .bigbtn, .pbtn, .liarword, .wlist .w, .scene {
+  .bigbtn, .pbtn, .liarword, .wlist .w, .ycell, .ychip {
     user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
   }
   .bigbtn.ghost { background: var(--card); color: var(--text); border: 1px solid var(--line); box-shadow: none; }
@@ -239,39 +239,243 @@
   .prophecy .small { font-size: 12px; color: #8a7f55; font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 10px; }
   .prophecy .big { font-size: 40px; display: block; margin: 8px 0 4px; }
 
-  /* ── 사라진 거 찾기 ── */
-  .scene {
-    position: relative; width: 100%; aspect-ratio: 1 / 1;
-    background: #0a120a; border: 1px solid var(--line); border-radius: 18px;
-    overflow: hidden; margin: 10px 0;
+  /* ── 요트 다이스 ── */
+  .ylabel { font-size: 12px; font-weight: 800; color: var(--sub); letter-spacing: 1px; margin: 18px 0 8px; }
+  .ylabel small { font-weight: 600; letter-spacing: 0; }
+  .ycount { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  .ychip {
+    padding: 13px 0; border-radius: 12px; background: var(--card); border: 1.5px solid var(--line);
+    color: var(--text); font-weight: 800; font-size: 15px; cursor: pointer; transition: transform .08s;
   }
-  .scene .layer { position: absolute; inset: 0; }
-  .scene .obj {
-    position: absolute; transform: translate(-50%, -50%); line-height: 1;
-    user-select: none; -webkit-user-select: none;
+  .ychip:active { transform: scale(.95); }
+  .ychip.on { border-color: var(--neon); color: var(--neon); background: rgba(143,255,0,.08); }
+  .ynames { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .yname-in {
+    display: flex; align-items: center; gap: 9px; padding: 0 12px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
   }
-  .scene .layer.blank .obj { visibility: hidden; }
-  .scene .ring {
-    position: absolute; width: 78px; height: 78px; margin: -39px 0 0 -39px;
-    border: 3px solid var(--neon); border-radius: 50%;
-    box-shadow: 0 0 26px rgba(143,255,0,.75); pointer-events: none;
-    animation: ringpulse 1.1s ease-in-out infinite;
+  .yname-in::before { content: ''; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--pc); box-shadow: 0 0 8px var(--pc); }
+  .yname-in input {
+    flex: 1; min-width: 0; background: none; border: none; outline: none;
+    color: var(--text); font: inherit; font-size: 16px; font-weight: 700; padding: 12px 0;
   }
-  @keyframes ringpulse { 50% { transform: scale(1.18); opacity: .65; } }
-  .scene .hintbox {
-    position: absolute; border: 2px dashed rgba(143,255,0,.5);
-    background: rgba(143,255,0,.05); border-radius: 14px; pointer-events: none;
+  .yresume {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
+    margin-top: 14px; padding: 14px 16px; border-radius: 16px; cursor: pointer; text-align: left;
+    background: rgba(143,255,0,.07); border: 1.5px solid var(--neon-dim); color: var(--text);
   }
-  .diffbar {
+  .yresume b { display: block; font-size: 15.5px; color: var(--neon); }
+  .yresume small { display: block; font-size: 12px; color: var(--sub); margin-top: 3px; }
+  .yresume em { font-style: normal; font-size: 20px; color: var(--neon); }
+
+  /* 차례 넘기기 */
+  .yhand { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 10px 0 24px; }
+  .yhand .yround { font-size: 12px; font-weight: 800; letter-spacing: 3px; color: var(--sub); }
+  .yhand .ybig {
+    width: 120px; height: 120px; border-radius: 34px; margin: 22px 0 16px;
+    display: flex; align-items: center; justify-content: center; font-size: 60px;
+    background: color-mix(in srgb, var(--pc) 14%, var(--card)); border: 2px solid var(--pc);
+    box-shadow: 0 0 60px color-mix(in srgb, var(--pc) 40%, transparent);
+    animation: yfloat 2.4s ease-in-out infinite;
+  }
+  @keyframes yfloat { 50% { transform: translateY(-9px) rotate(7deg); } }
+  .yhand .yname { font-size: 36px; font-weight: 900; color: var(--pc); letter-spacing: -1px; line-height: 1.2; word-break: keep-all; }
+  .yhand .yturn { font-size: 17px; font-weight: 800; margin-top: 2px; }
+  .yboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 18px; }
+
+  /* 점수 띠 */
+  .ystrip { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+  .ypls { flex: 1; min-width: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  .ypls::-webkit-scrollbar { display: none; }
+  .ypl {
+    flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px;
+    border-radius: 999px; background: var(--card); border: 1px solid var(--line);
+    font-size: 12px; font-weight: 700; color: var(--sub); white-space: nowrap;
+  }
+  .ypl::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--pc); }
+  .ypl b { color: var(--text); font-variant-numeric: tabular-nums; }
+  .ypl.on { border-color: var(--pc); color: var(--text); box-shadow: 0 0 14px color-mix(in srgb, var(--pc) 30%, transparent); }
+  .yico {
+    flex: none; width: 34px; height: 34px; border-radius: 10px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--card); font-size: 15px;
+  }
+
+  /* 판 — 위는 KEEP 선반, 아래는 펠트. 주사위는 둘 다 가로질러 날아다니므로 판에 직접 붙는다. */
+  .ytable {
+    position: relative; flex: none; height: 300px; --s: 50px;
+    user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation;
+  }
+  .yshelf { position: absolute; left: 0; right: 0; top: 0; height: 64px; display: grid; grid-template-columns: repeat(5, 1fr); }
+  .yslot {
+    margin: 5px; border: 1.5px dashed var(--line); border-radius: 12px;
+    display: flex; align-items: flex-end; justify-content: center; padding-bottom: 2px;
+    font-size: 8.5px; font-weight: 800; letter-spacing: 1.5px; color: #34452f;
+  }
+  .yfelt {
+    position: absolute; left: 0; right: 0; top: 70px; bottom: 0; border-radius: 22px; overflow: hidden;
+    background:
+      radial-gradient(ellipse 90% 70% at 50% 30%, #184019, #0d220f 65%, #071307),
+      #0d220f;
+    box-shadow: inset 0 0 0 1px rgba(143,255,0,.22), inset 0 0 50px rgba(0,0,0,.65), 0 12px 30px rgba(0,0,0,.45);
+  }
+  .yfelt::before {
+    content: ''; position: absolute; inset: 9px; border-radius: 15px;
+    border: 1px dashed rgba(143,255,0,.12); pointer-events: none;
+  }
+  .ycup {
+    position: absolute; width: 132px; height: 132px; margin: -66px 0 0 -66px; border-radius: 50%;
+    background: radial-gradient(circle, #030703 50%, #0a160a 68%, rgba(0,0,0,0) 71%);
+    box-shadow: 0 0 0 2px rgba(143,255,0,.4), 0 0 26px rgba(143,255,0,.28), inset 0 0 30px rgba(143,255,0,.12);
+    opacity: 0; transform: scale(.7); transition: opacity .18s, transform .3s cubic-bezier(.3,1.6,.5,1);
+  }
+  .ycup.on { opacity: 1; transform: none; }
+  .yhint {
+    position: absolute; left: 0; right: 0; top: 20%; text-align: center; pointer-events: none;
+    color: rgba(143,255,0,.6); font-size: 12.5px; font-weight: 700; line-height: 1.7; transition: opacity .2s;
+  }
+  .yhint b { color: var(--neon); }
+  .yhint.off { opacity: 0; }
+
+  /* 주사위. 결과 눈은 JS 가 정하고, 큐브 회전으로 그 면을 위로 보낸다 (Y_FACE). */
+  .ydie { position: absolute; left: 0; top: 0; width: var(--s); height: var(--s); perspective: 420px; z-index: 2; cursor: pointer; will-change: transform; }
+  .ydie.kept { z-index: 1; }
+  .yshadow {
+    position: absolute; inset: 8%; border-radius: 24%; background: rgba(0,0,0,.6);
+    filter: blur(5px); transform: translate(3px, 5px); opacity: .55;
+  }
+  .ycube { position: absolute; inset: 0; transform-style: preserve-3d; }
+  .yface {
+    position: absolute; inset: 0; border-radius: 21%; padding: 14%;
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    background: radial-gradient(circle at 30% 24%, #fffef9, #f2ebda 58%, #d9cfb3);
+    box-shadow: inset 0 0 0 1px rgba(90,70,30,.08), inset -3px -4px 9px rgba(120,95,50,.28);
+  }
+  /* 뒷면을 숨기지 않는다 — 둥근 모서리 틈으로 반대편 면의 안쪽이 보여서 속이 꽉 찬 주사위처럼 읽힌다 */
+  .yface.f1 { transform: translateZ(calc(var(--s) / 2)); }
+  .yface.f6 { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+  .yface.f2 { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+  .yface.f5 { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+  .yface.f3 { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+  .yface.f4 { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+  .yface i { place-self: center; width: 64%; height: 64%; border-radius: 50%; background: radial-gradient(circle at 38% 32%, #505050, #121212 70%); box-shadow: inset 0 1px 1.5px rgba(0,0,0,.7), 0 1px 0 rgba(255,255,255,.8); }
+  .yface i.o { visibility: hidden; }
+  .yface.v1 i.p { width: 100%; height: 100%; background: radial-gradient(circle at 38% 32%, #ff6262, #b0001a 72%); }
+  .yring {
+    position: absolute; inset: -5px; border-radius: 26%; pointer-events: none;
+    border: 2px solid var(--neon); box-shadow: 0 0 16px rgba(143,255,0,.55);
+    opacity: 0; transform: scale(1.2); transition: opacity .2s, transform .25s cubic-bezier(.3,1.6,.5,1);
+  }
+  .ydie.kept .yring { opacity: 1; transform: none; }
+  .yglow {
+    position: absolute; inset: -16px; border-radius: 50%; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle, rgba(143,255,0,.6), rgba(143,255,0,0) 66%);
+  }
+  .ydie.glow .yglow { animation: yglow 1.1s ease-in-out infinite; }
+  @keyframes yglow { 50% { opacity: 1; transform: scale(1.12); } }
+  .yflash { position: absolute; inset: 70px 0 0; border-radius: 22px; background: #fff; opacity: 0; pointer-events: none; z-index: 4; }
+  .ystamp {
+    position: absolute; left: 50%; top: 175px; z-index: 5; pointer-events: none; opacity: 0;
+    font-size: 30px; font-weight: 900; color: var(--neon); letter-spacing: -.5px; white-space: nowrap; text-align: center; line-height: 1.1;
+    text-shadow: 0 0 24px rgba(143,255,0,.85), 0 3px 0 #041004, 0 0 2px #000;
+    transform: translate(-50%, -50%);
+  }
+  .ystamp small { display: block; font-size: 17px; margin-top: 4px; color: var(--text); }
+  .ystamp.big { font-size: 56px; letter-spacing: -1px; }
+  .ystamp.show { animation: ystamp 1.9s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes ystamp {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(2.8) rotate(-12deg); }
+    12%  { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+    78%  { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
+    100% { opacity: 0; transform: translate(-50%, -64%) scale(.94) rotate(-5deg); }
+  }
+
+  /* 굴리기 버튼 — 누르고 있는 동안 파워가 왼쪽부터 차오른다 */
+  .yroll {
+    position: relative; overflow: hidden; width: 100%; margin-top: 12px; padding: 17px 18px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    border: none; border-radius: 18px; background: var(--neon); color: #0a1200;
+    font-size: 16.5px; font-weight: 900; letter-spacing: -.2px; cursor: pointer;
+    box-shadow: 0 0 26px rgba(143,255,0,.28); transition: transform .1s, box-shadow .2s;
+    touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  }
+  .yroll .ypow {
+    position: absolute; inset: 0; pointer-events: none; transform-origin: left;
+    transform: scaleX(var(--pw, 0));
+    background: linear-gradient(90deg, rgba(255,255,255,.1), rgba(255,255,255,.65));
+  }
+  .yroll span { position: relative; }
+  .yroll .yleft { font-size: 12px; letter-spacing: 3px; }
+  .yroll.hold { transform: scale(.975); box-shadow: 0 0 50px rgba(143,255,0,.65); animation: yrumble .08s linear infinite; }
+  @keyframes yrumble { 25% { translate: 1.5px -1px; } 75% { translate: -1.5px 1px; } }
+  .yroll:disabled { background: var(--card); color: var(--sub); box-shadow: none; outline: 1px solid var(--line); outline-offset: -1px; cursor: default; }
+
+  /* 점수표 */
+  .ysheet { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .ycol { display: flex; flex-direction: column; gap: 5px; }
+  .ycell {
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
+    height: 38px; padding: 0 11px; border-radius: 11px; cursor: pointer;
+    background: var(--card); border: 1px solid var(--line); color: var(--text);
+    font: inherit; font-size: 13px; font-weight: 700; transition: transform .08s, background .15s, border-color .15s;
+  }
+  .ycell:active { transform: scale(.97); }
+  .ycell .yl { display: flex; align-items: center; white-space: nowrap; }
+  .ycell b { font-size: 15.5px; font-weight: 900; color: var(--neon); font-variant-numeric: tabular-nums; }
+  .ycell:disabled { cursor: default; }
+  .ycell:disabled:not(.done) { color: var(--sub); }
+  .ycell.zero b { color: #46553f; }
+  .ycell.best { border-color: var(--neon-dim); box-shadow: 0 0 14px rgba(143,255,0,.25); }
+  .ycell.done { background: transparent; border-style: dashed; color: #5f705a; }
+  .ycell.done b { color: var(--text); }
+  .ycell.armed { background: var(--neon); border-color: var(--neon); color: #0a1200; transform: scale(1.03); box-shadow: 0 0 22px rgba(143,255,0,.5); }
+  .ycell.armed b { color: #0a1200; }
+  .ycell.pop { animation: ypop .55s cubic-bezier(.3,1.8,.5,1); }
+  @keyframes ypop { from { transform: scale(1.22); background: var(--neon); } }
+  .ybonus, .ytotal {
+    position: relative; overflow: hidden; height: 38px; border-radius: 11px; padding: 0 11px;
     display: flex; align-items: center; justify-content: space-between;
-    gap: 10px; margin-top: -2px;
+    border: 1px solid var(--line); font-size: 12.5px; font-weight: 800; color: var(--sub);
   }
-  .diffbar .lv {
-    font-size: 11px; font-weight: 800; letter-spacing: 1px;
-    padding: 4px 10px; border-radius: 999px;
-    background: rgba(143,255,0,.13); color: var(--neon);
+  .ybonus i { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(143,255,0,.13); transition: width .5s; }
+  .ybonus span { position: relative; }
+  .ybonus.got { border-color: var(--neon-dim); color: var(--neon); }
+  .ytotal { background: rgba(143,255,0,.06); color: var(--text); }
+  .ytotal b { font-size: 18px; font-weight: 900; color: var(--neon); font-variant-numeric: tabular-nums; }
+  .ymini {
+    display: inline-grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    width: 17px; height: 17px; padding: 2px; margin-right: 7px; border-radius: 4px; background: #efe8d6; flex: none;
   }
-  .diffbar .el { font-size: 15px; font-weight: 800; color: var(--sub); font-variant-numeric: tabular-nums; }
+  .ymini i { place-self: center; width: 3px; height: 3px; border-radius: 50%; background: #111; }
+  .ymini i.o { visibility: hidden; }
+  .ymini.v1 i.p { width: 6px; height: 6px; background: #c8102e; }
+
+  /* 전체 점수표 · 규칙 표 */
+  .ytbl { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 6px; }
+  .ytbl th, .ytbl td { padding: 7px 3px; text-align: center; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+  .ytbl th { font-weight: 900; word-break: keep-all; }
+  .ytbl td:first-child { text-align: left; color: var(--sub); font-weight: 700; white-space: nowrap; }
+  .ytbl tr.sub td { color: var(--sub); font-size: 11.5px; }
+  .ytbl tr.sum td { font-weight: 900; font-size: 14px; color: var(--neon); border-bottom: none; }
+  .ytbl.rules td { text-align: left; }
+  .ytbl.rules td:last-child { color: var(--text); }
+
+  /* 결과 */
+  .yrank { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 14px; }
+  .yrow {
+    display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 16px;
+    background: var(--card); border: 1px solid var(--line);
+    animation: yrowin .55s cubic-bezier(.2,1.4,.4,1) backwards;
+  }
+  @keyframes yrowin { from { opacity: 0; transform: translateY(18px) scale(.88); } }
+  .yrow .rk { width: 30px; font-weight: 900; color: var(--sub); font-size: 14px; }
+  .yrow .nm { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 16px; }
+  .yrow .nm::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--pc); }
+  .yrow b { font-size: 22px; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .yrow.win { padding: 20px 16px; border: 1.5px solid var(--pc); background: color-mix(in srgb, var(--pc) 10%, var(--card)); box-shadow: 0 0 30px color-mix(in srgb, var(--pc) 25%, transparent); }
+  .yrow.win .rk { font-size: 24px; }
+  .yrow.win .nm { font-size: 19px; }
+  .yrow.win b { font-size: 32px; color: var(--pc); }
+  .yconf { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
 
   /* ── 없던 기억 ── */
   .flashword {
@@ -379,10 +583,10 @@
 <noscript>
   <div style="max-width:440px;margin:0 auto;padding:28px 18px;color:#eaf5e0;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo',sans-serif">
     <h1 style="font-size:27px;font-weight:900">아이스브레이커</h1>
-    <p style="color:#8fa38a;line-height:1.6;margin-top:8px">처음 만난 자리에서 폰 하나로 바로<br>우와 3 · 게임 2 — 준비물도 연습도 없이.</p>
+    <p style="color:#8fa38a;line-height:1.6;margin-top:8px">처음 만난 자리에서 폰 하나로 바로<br>우와 2 · 게임 3 — 준비물도 연습도 없이.</p>
     <ul style="margin-top:16px;line-height:2;color:#eaf5e0">
       <li>🃏 사라지는 카드 — 전원이 기억한 카드가 전부 동시에 사라진다</li>
-      <li>🧐 사라진 거 찾기 — 대놓고 사라지는데 아무도 못 찾는다</li>
+      <li>🎲 요트 다이스 — 세 번 굴려 족보를 채우는 2~6인 주사위 게임</li>
       <li>🧠 없던 기억 — 한 번도 없던 단어를 다 같이 "봤다"고 확신한다</li>
       <li>🕵️ 라이어 — 한 명만 다른 단어, 본인도 모른다</li>
       <li>👉 동시에 지목 — 셋 세면 다 같이 한 사람을 가리킨다</li>
@@ -418,6 +622,8 @@ document.addEventListener('visibilitychange', () => {
 const shuffle = a => { a = a.slice(); for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
 const ment = t => `<div class="ment"><span class="mic">🎤 이렇게 말하세요</span>${t}</div>`;
 let currentTrick = null;
+// 게임이 걸어둔 리스너·루프를 홈으로 나갈 때 걷는다 (요트의 devicemotion 등)
+let leaveHook = null;
 
 /* ───────── 공통 셸 ───────── */
 function setHeader(title, showSecret) {
@@ -452,13 +658,14 @@ function openSecret(t) {
 /* ───────── 홈 ───────── */
 function goHome() {
   currentTrick = null;
+  if (leaveHook) { leaveHook(); leaveHook = null; }
   releaseWake();
   setHeader(null);
   const s = stage(`
     <div class="hero">
       <div class="hat">🧊</div>
       <h1><span class="dot" aria-hidden="true"></span>아이스<em>브레이커</em></h1>
-      <p>처음 만난 자리에서 폰 하나로 바로<br>우와 3 · 게임 2 — 준비물도 연습도 없이.</p>
+      <p>처음 만난 자리에서 폰 하나로 바로<br>우와 2 · 게임 3 — 준비물도 연습도 없이.</p>
     </div>
     <div class="tricklist">
       ${TRICKS.map((t,i) => `
@@ -523,136 +730,687 @@ function trickVanish() {
   };
 }
 
-/* ═════════ 2. 사라진 거 찾기 ═════════ */
-/* 변화맹(flicker paradigm). 두 장면 사이에 끼우는 '빈 화면'이 핵심 —
-   이게 없으면 변화가 움직임으로 감지돼서 즉시 들킨다. */
-const CB_FLASH = 320, CB_BLANK = 110;
-const CB_SCENES = [
-  { level: '보통', kind: 'gone', t: 7, note: '물건 하나가 통째로 사라집니다',
-    objs: [['🍕',38,35,42],['📚',82,66,38],['🎧',71,83,28],['☕',90,26,36],
-           ['🧸',50,21,40],['🕹️',81,92,36],['🔑',35,63,40],['🍩',61,92,32],
-           ['📷',15,91,38],['🧦',50,80,30],['🪴',23,16,34],['⌚',8,15,28],['🎸',24,35,34]] },
-  { level: '어려움', kind: 'swap', t: 11, to: '🍊', note: '하나가 다른 것으로 바뀝니다',
-    objs: [['🍇',65,38,28],['🍓',16,64,40],['🍌',9,35,30],['🍉',73,61,28],
-           ['🍎',36,44,44],['🥝',84,36,30],['🍑',66,91,32],['🍍',50,41,34],
-           ['🫐',51,65,30],['🥥',83,89,44],['🍒',26,21,44],['🥭',52,76,32],['🍋',43,8,30]] },
-  { level: '극악', kind: 'gone', t: 5, note: '작은 것 하나가 사라집니다',
-    objs: [['⭐',56,76,30],['🌙',29,50,28],['☁️',48,40,40],['🚀',15,9,32],
-           ['🛸',44,72,38],['🪐',67,29,26],['⚡',58,16,32],['🌈',9,82,42],
-           ['☄️',91,70,32],['🎈',73,89,32],['🛰️',43,87,26],['🌍',22,93,28],
-           ['✨',17,36,34],['🔭',87,43,42],['🌟',43,22,38]] },
+/* ═════════ 2. 요트 다이스 ═════════ */
+/* 세계 게임전집 51 규칙. 폰 하나를 돌려가며 2~6명.
+   이 게임의 전부는 '굴리는 맛'이다 — 꾹 눌러 흔들고(덜그럭) 떼면 던진다.
+   눈은 던지는 순간 먼저 정하고, 애니메이션이 그 면으로 떨어지도록 역산한다. */
+const Y_CATS = [
+  { k: '1', up: 1 }, { k: '2', up: 2 }, { k: '3', up: 3 },
+  { k: '4', up: 4 }, { k: '5', up: 5 }, { k: '6', up: 6 },
+  { k: 'choice', name: '초이스' },
+  { k: 'four',   name: '포 다이스' },
+  { k: 'full',   name: '풀하우스' },
+  { k: 'ss',     name: 'S. 스트레이트' },
+  { k: 'ls',     name: 'L. 스트레이트' },
+  { k: 'yacht',  name: '요트' },
 ];
-function trickChange(round) {
-  round = round || 0;
-  if (round === 0) return intro();
-  play(round - 1);
+const Y_COLORS = ['#8FFF00', '#ffbe73', '#5cc8ff', '#ff7ab8', '#c59bff', '#ffe45c'];
+const Y_SAVE = 'trick.yacht.v1', Y_MUTE = 'trick.yacht.mute';
+const Y_PIPS = { 1: [4], 2: [2,6], 3: [2,4,6], 4: [0,2,6,8], 5: [0,2,4,6,8], 6: [0,2,3,5,6,8] };
+// 그 눈을 위로 보내는 큐브 회전. CSS 면 배치(.yface.f1~f6)의 역회전이라 둘은 같이 움직여야 한다.
+const Y_FACE = { 1: { rx: 0, ry: 0 }, 2: { rx: 0, ry: -90 }, 3: { rx: -90, ry: 0 },
+                 4: { rx: 90, ry: 0 }, 5: { rx: 0, ry: 90 }, 6: { rx: 0, ry: 180 } };
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// 사파리 사생활 보호 모드 등에서는 localStorage 가 던진다. 저장은 편의일 뿐이니 조용히 넘긴다.
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} },
+};
 
-  function intro() {
-    const s = stage(`
-      <div class="headline">이 안에서 뭔가<br>계속 사라지고 있습니다 🧐</div>
-      ${ment(`"화면이 깜빡일 거예요. 그 안에서 <b>물건 하나가 사라졌다 나타났다</b> 반복합니다.<br><b>먼저 찾는 사람</b>이 이기는 겁니다. 자신 있죠?"`)}
-      <div class="subline">대놓고 바뀌는데도 대부분 못 찾습니다<br>총 3라운드, 갈수록 어려워집니다</div>
-      <div class="spacer"></div>
-      <button class="bigbtn" id="go">1라운드 시작 →</button>`);
-    s.querySelector('#go').onclick = () => trickChange(1);
+function yCounts(d) { const c = [0,0,0,0,0,0,0]; d.forEach(v => c[v]++); return c; }
+function yScore(k, d) {
+  const c = yCounts(d), sum = d.reduce((a, b) => a + b, 0);
+  const has = run => run.every(v => c[v] > 0);
+  switch (k) {
+    case 'choice': return sum;
+    case 'four':   return c.some(n => n >= 4) ? sum : 0;
+    case 'full':   return c.includes(3) && c.includes(2) ? sum : 0;   // 5개 같은 눈은 풀하우스가 아니다
+    case 'ss':     return [[1,2,3,4],[2,3,4,5],[3,4,5,6]].some(has) ? 15 : 0;
+    case 'ls':     return [[1,2,3,4,5],[2,3,4,5,6]].some(has) ? 30 : 0;
+    case 'yacht':  return c.includes(5) ? 50 : 0;
+    default:       return c[+k] * +k;
   }
+}
+const yUpper  = p => Y_CATS.slice(0, 6).reduce((a, c) => a + (p.s[c.k] || 0), 0);
+const yBonus  = p => yUpper(p) >= 63 ? 35 : 0;
+const yTotal  = p => Object.values(p.s).reduce((a, b) => a + b, 0) + yBonus(p);
+const yFilled = p => Object.keys(p.s).length;
 
-  function sceneHTML(sc, state) {
-    return sc.objs.map(([em, x, y, sz], i) => {
-      const swapped = state === 'b' && i === sc.t && sc.kind === 'swap';
-      const hidden = state === 'b' && i === sc.t && sc.kind === 'gone';
-      return `<span class="obj" data-i="${i}" style="left:${x}%;top:${y}%;font-size:${sz}px${hidden ? ';visibility:hidden' : ''}">${swapped ? sc.to : em}</span>`;
-    }).join('');
-  }
+// 방금 나온 눈에서 제일 센 족보 하나와, 그 족보를 이루는 주사위 번호들
+function yCombo(d) {
+  const c = yCounts(d), idxOf = v => d.map((x, i) => x === v ? i : -1).filter(i => i >= 0);
+  if (c.includes(5)) return { name: 'YACHT!', big: true, idx: [0,1,2,3,4] };
+  if (yScore('ls', d)) return { name: '라지 스트레이트!', idx: [0,1,2,3,4] };
+  const four = c.findIndex(n => n >= 4);
+  if (four > 0) return { name: '포 다이스!', idx: idxOf(four) };
+  if (yScore('full', d)) return { name: '풀하우스!', idx: [0,1,2,3,4] };
+  const run = [[3,4,5,6],[2,3,4,5],[1,2,3,4]].find(r => r.every(v => c[v]));
+  if (run) return { name: '스몰 스트레이트', idx: run.map(v => d.indexOf(v)) };
+  return null;
+}
 
-  /* 장면 A → 빈 화면 → 장면 B → 빈 화면 → 반복.
-     DOM에서 떨어져 나가면(뒤로가기 등) 스스로 멈춘다. */
-  function flicker(scene, sc, flash, blank) {
-    const ly = scene.querySelector('.layer');
-    let state = 'a', tid = null;
-    const step = () => {
-      if (!document.body.contains(ly)) return;
-      if (ly.classList.contains('blank')) {
-        ly.classList.remove('blank');
-        state = state === 'a' ? 'b' : 'a';
-        ly.innerHTML = sceneHTML(sc, state);
-        tid = setTimeout(step, flash);
-      } else {
-        ly.classList.add('blank');
-        tid = setTimeout(step, blank);
+/* 효과음은 전부 WebAudio 로 합성한다. 파일이 없으니 오프라인에서도 그대로 난다.
+   iOS 는 사용자 탭 안에서만 소리를 풀어주므로 버튼마다 unlock() 을 부른다. */
+const ySfx = (() => {
+  let ctx = null, noise = null, muted = store.get(Y_MUTE) === '1';
+  const ac = () => {
+    if (muted) return null;
+    try {
+      if (!ctx) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        if (!C) return null;
+        ctx = new C();
+        noise = ctx.createBuffer(1, ctx.sampleRate / 2, ctx.sampleRate);
+        const ch = noise.getChannelData(0);
+        for (let i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1;
       }
+      if (ctx.state === 'suspended') ctx.resume();
+      return ctx;
+    } catch (e) { return null; }
+  };
+  // 필터 건 노이즈 한 조각 — 주사위끼리, 주사위와 판이 부딪치는 소리
+  const hit = (vol, freq, dur, q, type = 'bandpass') => {
+    const c = ac(); if (!c || vol <= 0) return;
+    const t = c.currentTime, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = noise; f.type = type; f.frequency.value = freq; f.Q.value = q;
+    g.gain.setValueAtTime(Math.min(1, vol), t);
+    g.gain.exponentialRampToValueAtTime(.001, t + dur);
+    src.connect(f); f.connect(g); g.connect(c.destination);
+    src.start(t, Math.random() * .4, dur + .02);
+  };
+  const tone = (freq, dur, vol, type = 'triangle', at = 0, to) => {
+    const c = ac(); if (!c) return;
+    const t = c.currentTime + at, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + .008);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t + dur + .02);
+  };
+  return {
+    unlock: ac,
+    get muted() { return muted; },
+    toggle() { muted = !muted; store.set(Y_MUTE, muted ? '1' : null); ac(); return muted; },
+    rattle: p => {
+      hit(.16 + .3 * p, rnd(2400, 4200), .03, 7);
+      if (Math.random() < .4) hit(.1 + .2 * p, rnd(1100, 1900), .04, 5);
+    },
+    clack: v => { hit(.85 * v, rnd(1400, 2400), .07, 3); hit(.5 * v, rnd(280, 460), .09, 1.2, 'lowpass'); },
+    whoosh: p => {
+      const c = ac(); if (!c) return;
+      const t = c.currentTime, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      src.buffer = noise; f.type = 'bandpass'; f.Q.value = 1.2;
+      f.frequency.setValueAtTime(450, t); f.frequency.exponentialRampToValueAtTime(2800, t + .22);
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.1 + .18 * p, t + .05);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .28);
+      src.connect(f); f.connect(g); g.connect(c.destination);
+      src.start(t, 0, .3);
+    },
+    keep:   () => { tone(988, .06, .16, 'square'); tone(1480, .09, .12, 'triangle', .045); },
+    unkeep: () => tone(740, .08, .12, 'triangle', 0, 480),
+    blip:   i => tone(520 + i * 70, .06, .12, 'square'),
+    combo:  () => [659, 880, 1175].forEach((f, i) => tone(f, .16, .15, 'square', i * .07)),
+    fanfare: () => {
+      [523, 659, 784, 1047].forEach((f, i) => tone(f, .2, .16, 'square', i * .09));
+      tone(1319, .8, .18, 'triangle', .38); tone(1047, .8, .1, 'square', .38);
+    },
+    score: v => v
+      ? [0, 1, 2].forEach(i => tone((v >= 25 ? 740 : 620) * Math.pow(1.26, i), .1, .14, 'triangle', i * .06))
+      : tone(220, .38, .16, 'sawtooth', 0, 100),
+  };
+})();
+
+const yPips = v => Array.from({ length: 9 }, (_, c) => `<i class="${Y_PIPS[v].includes(c) ? 'p' : 'o'}"></i>`).join('');
+const yMini = v => `<i class="ymini v${v}">${yPips(v)}</i>`;
+const yDieHTML = i => `
+  <div class="ydie" data-i="${i}">
+    <div class="yglow"></div><div class="yshadow"></div>
+    <div class="ycube">
+      ${[1,2,3,4,5,6].map(v => `<div class="yface f${v} v${v}">${yPips(v)}</div>`).join('')}
+    </div>
+    <div class="yring"></div>
+  </div>`;
+
+function yLoad() {
+  try {
+    const g = JSON.parse(store.get(Y_SAVE));
+    const ok = g && Array.isArray(g.players) && g.players.length >= 2 && g.players.length <= 6
+      && g.players.every(p => p && typeof p.name === 'string' && typeof p.color === 'string' && p.s && typeof p.s === 'object')
+      && Number.isInteger(g.cur) && g.cur >= 0 && g.cur < g.players.length
+      && !g.players.every(p => yFilled(p) >= 12);
+    return ok ? g : null;
+  } catch (e) { return null; }
+}
+
+function yTable(G) {
+  const row = (label, f, cls = '') =>
+    `<tr class="${cls}"><td>${label}</td>${G.players.map(p => `<td>${f(p)}</td>`).join('')}</tr>`;
+  const bg = document.createElement('div');
+  bg.className = 'modalbg';
+  bg.innerHTML = `<div class="modal">
+    <h3><span>📋 전체 점수표</span></h3>
+    <table class="ytbl">
+      <thead><tr><th></th>${G.players.map(p => `<th style="color:${p.color}">${esc(p.name)}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${Y_CATS.slice(0, 6).map(c => row(`${yMini(c.up)}${c.up}`, p => p.s[c.k] ?? '·')).join('')}
+        ${row('보너스', p => yBonus(p) ? '+35' : `${yUpper(p)}/63`, 'sub')}
+        ${Y_CATS.slice(6).map(c => row(c.name, p => p.s[c.k] ?? '·')).join('')}
+        ${row('합계', yTotal, 'sum')}
+      </tbody>
+    </table>
+    <button class="close">닫기</button>
+  </div>`;
+  bg.querySelector('.close').onclick = () => bg.remove();
+  bg.onclick = e => { if (e.target === bg) bg.remove(); };
+  document.body.appendChild(bg);
+}
+
+function yCountUp(el, a, b, ms = 650) {
+  if (!el) return;
+  const t0 = performance.now();
+  (function f(now) {
+    const p = Math.min(1, (now - t0) / ms);
+    el.textContent = Math.round(a + (b - a) * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(f);
+  })(t0);
+}
+
+function yConfetti(ms = 2600) {
+  if (RM) return;
+  const cv = document.createElement('canvas');
+  cv.className = 'yconf';
+  document.body.appendChild(cv);
+  const dpr = Math.min(2, devicePixelRatio || 1), W = innerWidth, H = innerHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const g = cv.getContext('2d');
+  g.scale(dpr, dpr);
+  const cols = [...Y_COLORS, '#ffffff'];
+  const ps = Array.from({ length: 170 }, () => ({
+    x: W / 2 + rnd(-50, 50), y: H * .42, vx: rnd(-10, 10), vy: rnd(-19, -6),
+    r: rnd(0, 6.3), vr: rnd(-.3, .3), w: rnd(6, 11), h: rnd(3, 6), c: cols[Math.random() * cols.length | 0],
+  }));
+  const t0 = performance.now();
+  (function f(now) {
+    const t = now - t0;
+    g.clearRect(0, 0, W, H);
+    g.globalAlpha = Math.max(0, 1 - Math.max(0, t - ms * .6) / (ms * .4));
+    for (const p of ps) {
+      p.vy += .42; p.vx *= .985; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      g.save(); g.translate(p.x, p.y); g.rotate(p.r);
+      g.fillStyle = p.c; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h * Math.abs(Math.cos(p.r * 2)) + 1);
+      g.restore();
+    }
+    if (t < ms) requestAnimationFrame(f); else cv.remove();
+  })(t0);
+}
+
+// iOS 는 흔들기(devicemotion)를 쓰려면 탭 안에서 권한을 받아야 한다. 거절해도 버튼으로 다 된다.
+let yMotionAsked = false;
+function yAskMotion() {
+  if (yMotionAsked) return;
+  yMotionAsked = true;
+  try {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function')
+      DeviceMotionEvent.requestPermission().catch(() => {});
+  } catch (e) {}
+}
+
+function trickYacht() {
+  if (leaveHook) leaveHook();
+  let G = null, T = null;
+  const onMotion = e => { if (T && T.motion) T.motion(e); };
+  addEventListener('devicemotion', onMotion);
+  leaveHook = () => {
+    removeEventListener('devicemotion', onMotion);
+    if (T) cancelAnimationFrame(T.raf);
+    T = null;
+  };
+  const save = () => store.set(Y_SAVE, JSON.stringify(G));
+  setup();
+
+  function setup() {
+    const saved = yLoad();
+    let n = saved ? saved.players.length : 4;
+    const names = [];
+    const s = stage(`
+      <div class="headline">요트 다이스 🎲</div>
+      <div class="subline">주사위 다섯 개를 한 차례에 최대 <b>세 번</b> 굴려<br>족보 12칸을 채웁니다. 합계가 제일 높으면 승리!</div>
+      ${saved ? `<button class="yresume" id="resume">
+          <span><b>이어하기</b><small>라운드 ${yFilled(saved.players[saved.cur]) + 1} / 12 · ${saved.players.map(p => esc(p.name)).join(' · ')}</small></span>
+          <em>→</em>
+        </button>` : ''}
+      <div class="ylabel">몇 명이 하나요?</div>
+      <div class="ycount">${[2,3,4,5,6].map(k => `<button class="ychip" data-n="${k}">${k}명</button>`).join('')}</div>
+      <div class="ylabel">이름 <small>· 비워두면 번호로 부릅니다</small></div>
+      <div class="ynames" id="names"></div>
+      <div class="spacer" style="min-height:20px"></div>
+      <button class="bigbtn" id="go">새 게임 시작 🎲</button>`);
+    const box = s.querySelector('#names');
+    const draw = () => {
+      box.querySelectorAll('input').forEach((el, i) => { names[i] = el.value; });
+      s.querySelectorAll('.ychip').forEach(b => b.classList.toggle('on', +b.dataset.n === n));
+      box.innerHTML = Array.from({ length: n }, (_, i) => `
+        <label class="yname-in" style="--pc:${Y_COLORS[i]}">
+          <input maxlength="6" placeholder="${i + 1}번" value="${esc(names[i] || '')}" autocomplete="off">
+        </label>`).join('');
     };
-    ly.innerHTML = sceneHTML(sc, 'a');
-    tid = setTimeout(step, flash);
-    return () => { clearTimeout(tid); };
+    draw();
+    s.querySelectorAll('.ychip').forEach(b => b.onclick = () => { n = +b.dataset.n; vib(8); draw(); });
+    s.querySelector('#go').onclick = () => {
+      yAskMotion(); ySfx.unlock();
+      G = { cur: 0, players: [...box.querySelectorAll('input')].map((el, i) =>
+        ({ name: el.value.trim() || `${i + 1}번`, color: Y_COLORS[i], s: {} })) };
+      save(); handoff();
+    };
+    const rs = s.querySelector('#resume');
+    if (rs) rs.onclick = () => { yAskMotion(); ySfx.unlock(); G = saved; handoff(); };
   }
 
-  function play(ri) {
-    const sc = CB_SCENES[ri];
+  /* 폰을 넘기는 순간. 누구 차례인지 화면 전체로 못 박아서 "내 차례야?"를 없앤다. */
+  function handoff() {
+    const p = G.players[G.cur];
     const s = stage(`
-      <div class="diffbar">
-        <span class="lv">${ri + 1}라운드 · ${sc.level}</span>
-        <span class="el" id="el">0초</span>
+      <div class="yhand" style="--pc:${p.color}">
+        <div class="yround">ROUND ${yFilled(p) + 1} / 12</div>
+        <div class="ybig">🎲</div>
+        <div class="yname">${esc(p.name)}</div>
+        <div class="yturn">차례입니다</div>
+        <div class="subline" style="margin-top:8px">폰을 <b>${esc(p.name)}</b>에게 넘겨주세요</div>
+        <div class="yboard">${G.players.map((q, i) =>
+          `<span class="ypl${i === G.cur ? ' on' : ''}" style="--pc:${q.color}">${esc(q.name)} <b>${yTotal(q)}</b></span>`).join('')}</div>
       </div>
-      <div class="scene" id="sc"><div class="layer"></div></div>
-      <div class="subline" id="msg">${sc.note}<br><b>찾은 사람은 말하지 말고 손만 드세요</b></div>
-      <div class="btnrow">
-        <button class="bigbtn ghost" id="hint">힌트</button>
-        <button class="bigbtn" id="ans">정답 공개</button>
-      </div>`);
-    const stop = flicker(s.querySelector('#sc'), sc, CB_FLASH, CB_BLANK);
-    let sec = 0;
-    const el = s.querySelector('#el');
-    const tick = setInterval(() => {
-      if (!document.body.contains(el)) return clearInterval(tick);
-      el.textContent = ++sec + '초';
-    }, 1000);
+      <button class="bigbtn" id="go" style="background:${p.color};box-shadow:0 0 30px ${p.color}55">굴리러 가기 →</button>`);
+    s.querySelector('#go').onclick = () => { ySfx.unlock(); vib(15); turn(); };
+  }
 
-    s.querySelector('#hint').onclick = () => {
+  function turn() {
+    const me = G.cur, p = G.players[me];
+    const s = stage(`
+      <div class="ystrip">
+        <div class="ypls">${G.players.map((q, i) =>
+          `<span class="ypl${i === me ? ' on' : ''}" style="--pc:${q.color}">${esc(q.name)} <b data-p="${i}">${yTotal(q)}</b></span>`).join('')}</div>
+        <button class="yico" id="tbl" aria-label="전체 점수표">📋</button>
+        <button class="yico" id="mute" aria-label="소리 켜기/끄기">${ySfx.muted ? '🔇' : '🔊'}</button>
+      </div>
+      <div class="ytable" id="tb">
+        <div class="yshelf">${'<div class="yslot">KEEP</div>'.repeat(5)}</div>
+        <div class="yfelt">
+          <div class="ycup" id="cup"></div>
+          <div class="yhint" id="hint">버튼을 <b>꾹</b> 눌러 흔들고, 떼면 던져요<br>폰을 흔들어도 굴러갑니다</div>
+        </div>
+        ${[0,1,2,3,4].map(yDieHTML).join('')}
+        <div class="yflash" id="flash"></div>
+        <div class="ystamp" id="stamp"></div>
+      </div>
+      <button class="yroll" id="roll"><i class="ypow"></i><span id="lbl"></span><span class="yleft" id="left"></span></button>
+      <div class="ysheet" id="sheet"></div>`);
+    const $ = q => s.querySelector(q);
+    const tb = $('#tb'), cup = $('#cup'), roll = $('#roll'), sheet = $('#sheet'), stamp = $('#stamp');
+    const dice = [...tb.querySelectorAll('.ydie')];
+    const cubes = dice.map(d => d.querySelector('.ycube'));
+    const shadows = dice.map(d => d.querySelector('.yshadow'));
+
+    // 판 좌표계. 선반(0~64) 아래 70px 부터가 펠트다 — CSS 의 .yshelf/.yfelt 와 같은 숫자.
+    const W = tb.clientWidth, H = tb.clientHeight, FELT = 70;
+    const S = Math.round(Math.max(40, Math.min(54, W / 7.2)));
+    tb.style.setProperty('--s', S + 'px');
+    const CUP = { x: W / 2, y: H - 80 };
+    cup.style.left = CUP.x + 'px';
+    cup.style.top = (CUP.y - FELT) + 'px';
+
+    const alive = () => T && document.body.contains(tb);
+    const dT = q => `translate3d(${q.x - S / 2}px,${q.y - S / 2}px,0) scale(${q.s})`;
+    const cT = r => `rotateZ(${r.yaw}deg) rotateX(${r.rx}deg) rotateY(${r.ry}deg)`;
+    const cupSpot = (j, n) => {
+      if (n === 1) return { x: CUP.x, y: CUP.y, s: .74 };
+      const a = j / n * Math.PI * 2 - Math.PI / 2, r = n === 2 ? 16 : 24;
+      return { x: CUP.x + Math.cos(a) * r, y: CUP.y + Math.sin(a) * r, s: .74 };
+    };
+    const shelfSpot = i => ({ x: W * (i + .5) / 5, y: 32, s: .84 });
+    const free = () => [0,1,2,3,4].filter(i => !T.kept[i]);
+    const canRoll = () => alive() && !T.busy && !T.holding && T.rolls < 3 && free().length > 0;
+
+    T = {
+      rolls: 0, busy: false, holding: null, armed: null, power: 0, motionPow: 0, raf: 0, frame: 0, coolUntil: 0,
+      dice: [0,1,2,3,4].map(() => 1 + (Math.random() * 6 | 0)),
+      kept: [false, false, false, false, false], pos: [], home: [], rot: [],
+    };
+    dice.forEach((el, i) => {
+      const f = Y_FACE[T.dice[i]];
+      T.rot[i] = { rx: f.rx, ry: f.ry, yaw: rnd(0, 360) };
+      T.pos[i] = cupSpot(i, 5);
+      el.style.transform = dT(T.pos[i]);
+      cubes[i].style.transform = cT(T.rot[i]);
+    });
+    cup.classList.add('on');
+    paintRoll(); renderSheet();
+
+    function moveDie(i, to, dur, easing) {
+      dice[i].animate([{ transform: dT(T.pos[i]) }, { transform: dT(to) }], { duration: dur, easing });
+      T.pos[i] = to;
+      dice[i].style.transform = dT(to);
+    }
+
+    // 서로 겹치지 않는 착지점. avoid 에 든 자리도 피한다.
+    function spots(n, avoid = []) {
+      const out = [...avoid], m = S * .8;
+      for (let k = 0; k < n; k++) {
+        let best = null, bd = -1;
+        for (let t = 0; t < 80; t++) {
+          const q = { x: rnd(m, W - m), y: rnd(FELT + m, H - m) };
+          const d = out.reduce((a, o) => Math.min(a, Math.hypot(q.x - o.x, q.y - o.y)), Infinity);
+          if (d > bd) { bd = d; best = q; }
+          if (d > S * 1.5) break;
+        }
+        out.push(best);
+      }
+      return out.slice(avoid.length);
+    }
+
+    function paintRoll() {
+      $('#left').textContent = '●'.repeat(3 - T.rolls) + '○'.repeat(T.rolls);
+      roll.disabled = !T.holding && !canRoll();
+      roll.classList.toggle('hold', !!T.holding);
+      $('#lbl').textContent =
+          T.holding       ? '덜그럭… 떼면 던져요!'
+        : T.rolls >= 3    ? '칸을 골라 기록하세요'
+        : !free().length  ? '전부 킵 — 칸을 고르세요'
+        : T.rolls === 0   ? '꾹 눌러 흔들기'
+        :                   '다시 굴리기 · 남길 건 먼저 탭';
+    }
+
+    /* ── 흔들기: 누르고 있는 동안 컵 속에서 덜그럭 ── */
+    function startShake(src) {
+      T.holding = src; T.t0 = performance.now(); T.power = 0; T.frame = 0;
+      T.motionPow = src === 'motion' ? .25 : 0; T.lastShake = T.t0; T.nextClack = 0; T.armed = null;
+      ySfx.unlock();
+      $('#hint').classList.add('off');
+      stamp.className = 'ystamp';
+      dice.forEach(d => d.classList.remove('glow'));
+      cup.classList.add('on');
+      const f = free();
+      f.forEach((i, j) => moveDie(i, cupSpot(j, f.length), 150, 'ease-in'));
+      T.gatherUntil = T.t0 + 150;
+      paintRoll(); renderSheet();
+      T.raf = requestAnimationFrame(rattle);
+    }
+
+    function rattle(now) {
+      if (!alive() || !T.holding) return;
+      T.power = Math.min(1, Math.max((now - T.t0) / 1200, T.motionPow));
+      if (T.holding === 'motion' && now - T.lastShake > 280) return doThrow();
+      if (now > T.gatherUntil && T.frame++ % 2 === 0) {
+        const f = free(), amp = 2 + 6 * T.power, sp = 12 + 30 * T.power;
+        f.forEach((i, j) => {
+          const c = cupSpot(j, f.length), r = T.rot[i];
+          T.pos[i] = { x: c.x + rnd(-amp, amp), y: c.y + rnd(-amp, amp), s: c.s };
+          r.rx += rnd(-sp, sp); r.ry += rnd(-sp, sp); r.yaw += rnd(-sp, sp);
+          dice[i].style.transform = dT(T.pos[i]);
+          cubes[i].style.transform = cT(r);
+        });
+        if (now >= T.nextClack) {
+          ySfx.rattle(T.power); vib(5);
+          T.nextClack = now + rnd(60, 150) * (1.3 - .7 * T.power);
+        }
+      }
+      roll.style.setProperty('--pw', T.power.toFixed(3));
+      T.raf = requestAnimationFrame(rattle);
+    }
+
+    /* ── 던지기: 떼는 순간 눈을 정하고, 그 면으로 떨어지는 궤적을 역산한다 ── */
+    function doThrow() {
+      if (!T.holding) return;
+      cancelAnimationFrame(T.raf);
+      const power = Math.max(.3, T.power);
+      T.holding = null; T.busy = true; T.rolls++;
+      roll.style.setProperty('--pw', 0);
+      cup.classList.remove('on');
+      const f = free(), targets = spots(f.length);
+      f.forEach(i => { T.dice[i] = 1 + (Math.random() * 6 | 0); });
+      ySfx.whoosh(power); vib(18);
+      let end = 0, hit = Infinity;
+      f.forEach((i, j) => {
+        const dur = (RM ? 420 : 780 + 420 * power) * rnd(.88, 1.12);
+        hit = Math.min(hit, fling(i, targets[j], dur, power));
+        end = Math.max(end, dur);
+      });
+      T.coolUntil = performance.now() + end + 700;   // 흔들던 손이 멈추는 동안 또 굴러가지 않게
+      setTimeout(() => { if (alive()) jolt(power); }, hit);
+      setTimeout(() => { if (alive()) landed(); }, end + 60);
+      paintRoll(); renderSheet();
+    }
+
+    function fling(i, to, dur, power) {
+      const from = T.pos[i], r0 = T.rot[i], f = Y_FACE[T.dice[i]];
+      const turns = RM ? 0 : 1 + Math.round(power * 2 + Math.random());
+      const dir = () => Math.random() < .5 ? -1 : 1;
+      // 목표 각은 '그 면 + 360° 의 배수' — 몇 바퀴를 돌든 마지막엔 정해둔 눈이 위로 온다
+      const r1 = {
+        rx: f.rx + 360 * (Math.round((r0.rx - f.rx) / 360) + turns * dir()),
+        ry: f.ry + 360 * (Math.round((r0.ry - f.ry) / 360) + Math.max(0, turns - (Math.random() * 2 | 0)) * dir()),
+        yaw: r0.yaw + dir() * rnd(60, 160 + 240 * power),
+      };
+      // 튀어 오르는 높이. [시작, 끝, 최고점] — 첫 포물선이 크고 바운스마다 줄어든다
+      const peak = .75 + .55 * power;
+      const B = RM ? [[0, 1, .2]] : [[0, .5, peak], [.5, .76, peak * .34], [.76, .9, peak * .12], [.9, 1, 0]];
+      const hgt = p => { for (const [a, b, h] of B) if (p <= b) return h * Math.sin(Math.PI * (p - a) / (b - a)); return 0; };
+      const land = { x: to.x, y: to.y, s: 1 };
+      const K = 40, kd = [], ks = [], kc = [];
+      for (let k = 0; k <= K; k++) {
+        const p = k / K, e = 1 - Math.pow(1 - p, 2.4), re = 1 - Math.pow(1 - p, 2), h = hgt(p);
+        kd.push({ offset: p, transform: dT({
+          x: from.x + (land.x - from.x) * e,
+          y: from.y + (land.y - from.y) * e,
+          s: from.s + (1 - from.s) * Math.min(1, p * 3) + .45 * h,
+        }) });
+        ks.push({ offset: p, transform: `translate(${3 + 20 * h}px,${5 + 26 * h}px) scale(${1 - .3 * h})`, opacity: Math.max(.12, .55 - .35 * h) });
+        kc.push({ offset: p, transform: cT({
+          rx: r0.rx + (r1.rx - r0.rx) * re,
+          ry: r0.ry + (r1.ry - r0.ry) * re,
+          yaw: r0.yaw + (r1.yaw - r0.yaw) * re,
+        }) });
+      }
+      const o = { duration: dur, easing: 'linear' };
+      dice[i].animate(kd, o); shadows[i].animate(ks, o); cubes[i].animate(kc, o);
+      const norm = a => ((a % 360) + 360) % 360;
+      T.pos[i] = land; T.home[i] = land;
+      T.rot[i] = { rx: norm(r1.rx), ry: norm(r1.ry), yaw: norm(r1.yaw) };
+      dice[i].style.transform = dT(land);
+      cubes[i].style.transform = cT(T.rot[i]);
+      // 바운스마다 '딱' — 두 번째부터는 점점 작게
+      B.slice(0, -1).forEach(([, b], n) =>
+        setTimeout(() => { if (alive()) ySfx.clack(power * ([1, .5, .22][n] || .2)); }, b * dur));
+      return B[0][1] * dur;
+    }
+
+    function jolt(power) {
       vib(25);
-      const [, x, y] = sc.objs[sc.t];
-      const box = document.createElement('div');
-      box.className = 'hintbox';
-      box.style.cssText = `left:${x < 50 ? 2 : 50}%;top:${y < 50 ? 2 : 50}%;width:48%;height:48%`;
-      s.querySelector('#sc').appendChild(box);
-      s.querySelector('#msg').innerHTML = '이 안에 있습니다<br><b>그래도 잘 안 보이죠?</b>';
-      s.querySelector('#hint').disabled = true;
-      s.querySelector('#hint').style.opacity = .35;
+      if (RM) return;
+      const a = 2 + 4 * power;
+      tb.animate([
+        { transform: 'none' }, { transform: `translate(${a}px,${-a}px)` },
+        { transform: `translate(${-a}px,${a * .6}px)` }, { transform: `translate(${a * .4}px,0)` }, { transform: 'none' },
+      ], { duration: 220, easing: 'ease-out' });
+    }
+
+    function showStamp(html, big) {
+      stamp.innerHTML = html;
+      stamp.className = 'ystamp';
+      void stamp.offsetWidth;   // 애니메이션을 처음부터 다시 틀기 위한 리플로우
+      stamp.className = 'ystamp show' + (big ? ' big' : '');
+    }
+
+    function landed() {
+      T.busy = false;
+      const c = yCombo(T.dice);
+      if (c) {
+        c.idx.forEach(i => dice[i].classList.add('glow'));
+        if (c.big) {
+          showStamp(T.rolls === 1 ? 'YACHT!<small>한 번에!</small>' : 'YACHT!', true);
+          $('#flash').animate([{ opacity: 0 }, { opacity: .85 }, { opacity: 0 }], { duration: 380 });
+          yConfetti(); ySfx.fanfare(); vib([60, 40, 60, 40, 220]);
+        } else {
+          showStamp(c.name, false);
+          ySfx.combo(); vib([30, 30, 60]);
+        }
+      }
+      paintRoll(); renderSheet();
+    }
+
+    /* ── 킵: 탭하면 선반으로 착, 다시 탭하면 판으로 ── */
+    tb.addEventListener('click', e => {
+      const el = e.target.closest('.ydie');
+      if (!el || !alive() || T.busy || T.holding || T.rolls === 0 || T.rolls >= 3) return;
+      const i = +el.dataset.i;
+      T.kept[i] = !T.kept[i];
+      el.classList.toggle('kept', T.kept[i]);
+      let to;
+      if (T.kept[i]) {
+        // 선반에서는 가지런히 — 눈은 그대로 두고 비틀린 각만 90° 단위로 편다
+        const r = T.rot[i], st = { ...r, yaw: Math.round(r.yaw / 90) * 90 };
+        cubes[i].animate([{ transform: cT(r) }, { transform: cT(st) }], { duration: 260, easing: 'ease-out' });
+        T.rot[i] = st; cubes[i].style.transform = cT(st);
+        to = shelfSpot(i);
+      } else {
+        const others = [0,1,2,3,4].filter(j => j !== i && !T.kept[j]).map(j => T.pos[j]);
+        const h = T.home[i], clear = others.every(o => Math.hypot(o.x - h.x, o.y - h.y) > S * 1.2);
+        to = clear ? h : { ...spots(1, others)[0], s: 1 };
+        T.home[i] = to;
+      }
+      moveDie(i, to, 280, 'cubic-bezier(.3,1.5,.5,1)');
+      T.kept[i] ? ySfx.keep() : ySfx.unkeep();
+      vib(10);
+      paintRoll();
+    });
+
+    roll.addEventListener('pointerdown', e => {
+      if (!canRoll()) return;
+      e.preventDefault();
+      try { roll.setPointerCapture(e.pointerId); } catch (_) {}
+      startShake('pointer');
+    });
+    const release = () => { if (alive() && T.holding === 'pointer') doThrow(); };
+    roll.addEventListener('pointerup', release);
+    roll.addEventListener('pointercancel', release);
+    roll.addEventListener('contextmenu', e => e.preventDefault());
+    roll.addEventListener('keydown', e => {
+      if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && canRoll()) { e.preventDefault(); startShake('pointer'); }
+    });
+    roll.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') release(); });
+
+    // 폰 흔들기. 세게 흔드는 동안 컵이 덜그럭거리고, 손을 멈추면(280ms) 던진다.
+    T.motion = e => {
+      if (!alive() || performance.now() < T.coolUntil) return;
+      const a = e.acceleration;
+      let m;
+      if (a && a.x != null) m = Math.hypot(a.x, a.y, a.z);
+      else {
+        const g = e.accelerationIncludingGravity;
+        if (!g || g.x == null) return;
+        m = Math.abs(Math.hypot(g.x, g.y, g.z) - 9.81);
+      }
+      if (m < 12) return;
+      if (!T.holding) { if (!canRoll()) return; startShake('motion'); }
+      T.lastShake = performance.now();
+      T.motionPow = Math.min(1, T.motionPow + m / 260);
     };
-    s.querySelector('#ans').onclick = () => { clearInterval(tick); stop(); reveal(ri, sec); };
+
+    /* ── 점수표: 탭 한 번은 고르기, 한 번 더는 기록 ── */
+    function renderSheet() {
+      const show = T.rolls > 0 && !T.busy && !T.holding;
+      const prev = {};
+      if (show) Y_CATS.forEach(c => { if (!(c.k in p.s)) prev[c.k] = yScore(c.k, T.dice); });
+      const best = Math.max(0, ...Object.values(prev));
+      const cell = c => {
+        const done = c.k in p.s, v = done ? p.s[c.k] : prev[c.k], armed = !done && T.armed === c.k;
+        const cls = done ? 'done' : !show ? '' : armed ? 'armed' : v === 0 ? 'zero' : v === best ? 'best' : '';
+        const label = armed ? '한 번 더 탭 ✓' : c.up ? `${yMini(c.up)}${c.up}` : c.name;
+        return `<button class="ycell ${cls}" data-k="${c.k}"${done || !show ? ' disabled' : ''}>
+          <span class="yl">${label}</span><b>${v ?? ''}</b></button>`;
+      };
+      const up = yUpper(p), got = up >= 63;
+      sheet.innerHTML = `
+        <div class="ycol">
+          ${Y_CATS.slice(0, 6).map(cell).join('')}
+          <div class="ybonus${got ? ' got' : ''}"><i style="width:${Math.min(100, up / 63 * 100)}%"></i>
+            <span>보너스</span><span>${got ? '+35' : `${up} / 63`}</span></div>
+        </div>
+        <div class="ycol">
+          ${Y_CATS.slice(6).map(cell).join('')}
+          <div class="ytotal"><span>합계</span><b>${yTotal(p)}</b></div>
+        </div>`;
+    }
+    sheet.addEventListener('click', e => {
+      const b = e.target.closest('.ycell');
+      if (!b || b.disabled || !alive() || T.busy || T.holding) return;
+      const k = b.dataset.k;
+      if (T.armed === k) return commit(k);
+      T.armed = k;
+      ySfx.blip(2); vib(8);
+      renderSheet();
+    });
+
+    function commit(k) {
+      const v = yScore(k, T.dice), before = yTotal(p), hadBonus = yBonus(p) > 0;
+      p.s[k] = v;
+      T.busy = true; T.armed = null;
+      G.cur = (me + 1) % G.players.length;
+      save();
+      renderSheet(); paintRoll();
+      sheet.querySelector(`[data-k="${k}"]`).classList.add('pop');
+      yCountUp(s.querySelector(`.ypls b[data-p="${me}"]`), before, yTotal(p));
+      ySfx.score(v); vib(v ? [20, 30, 40] : 90);
+      const bonusNow = !hadBonus && yBonus(p) > 0;
+      if (bonusNow) setTimeout(() => {
+        if (!alive()) return;
+        showStamp('보너스 +35!', false); ySfx.combo(); vib([30, 30, 60]);
+      }, 450);
+      setTimeout(() => {
+        if (!alive()) return;
+        G.players.every(q => yFilled(q) >= 12) ? finish() : handoff();
+      }, bonusNow ? 2000 : 1200);
+    }
+
+    $('#mute').onclick = e => { e.currentTarget.textContent = ySfx.toggle() ? '🔇' : '🔊'; };
+    $('#tbl').onclick = () => yTable(G);
   }
 
-  function reveal(ri, sec) {
-    const sc = CB_SCENES[ri];
-    const [em, x, y] = sc.objs[sc.t];
-    const last = ri === CB_SCENES.length - 1;
-    vib([80,60,80,60,180]);
+  function finish() {
+    store.set(Y_SAVE, null);
+    const ranked = G.players.map(p => ({ p, t: yTotal(p) })).sort((a, b) => b.t - a.t);
+    ranked.forEach((r, i) => { r.rank = i && r.t === ranked[i - 1].t ? ranked[i - 1].rank : i + 1; });
+    const n = ranked.length, step = RM ? 200 : 750;
     const s = stage(`
-      <div class="diffbar">
-        <span class="lv">${ri + 1}라운드 정답</span>
-        <span class="el">${sec}초 걸림</span>
-      </div>
-      <div class="scene" id="sc"><div class="layer"></div></div>
-      <div class="lookhand" style="font-size:24px;margin:14px 0 6px">
-        ${sc.kind === 'swap' ? `${em} → ${sc.to} 로 바뀌고 있었습니다` : `${em} 가 사라지고 있었습니다`}
-      </div>
-      ${ment(`"이렇게 <b>대놓고</b> 바뀌는데 못 보셨죠?<br>눈은 멀쩡합니다 — <b>깜빡임이 뇌를 속인 겁니다.</b>"`)}
-      <div class="spacer"></div>
-      ${last
-        ? '<button class="bigbtn ghost" id="re">처음부터 다시</button>'
-        : `<div class="btnrow">
-             <button class="bigbtn ghost" id="re">처음부터</button>
-             <button class="bigbtn" id="nx">${ri + 2}라운드 →</button>
-           </div>`}`);
-    const el = s.querySelector('#sc');
-    flicker(el, sc, 900, 260);      // 천천히 — 이제 다 같이 보이게
-    const ring = document.createElement('div');
-    ring.className = 'ring';
-    ring.style.cssText = `left:${x}%;top:${y}%`;
-    el.appendChild(ring);
-    s.querySelector('#re').onclick = () => trickChange(0);
-    const nx = s.querySelector('#nx');
-    if (nx) nx.onclick = () => trickChange(ri + 2);
+      <div class="headline">최종 결과 🏆</div>
+      <div class="subline">꼴찌부터 공개합니다…</div>
+      <div class="yrank">${ranked.map((r, i) => `
+        <div class="yrow${r.rank === 1 ? ' win' : ''}" style="--pc:${r.p.color};animation-delay:${(n - 1 - i) * step}ms">
+          <span class="rk">${r.rank === 1 ? '👑' : r.rank + '위'}</span>
+          <span class="nm">${esc(r.p.name)}</span><b>${r.t}</b>
+        </div>`).join('')}</div>
+      <button class="bigbtn ghost" id="tbl" style="margin-top:0">📋 전체 점수표</button>
+      <div class="spacer" style="min-height:16px"></div>
+      <div class="btnrow">
+        <button class="bigbtn ghost" id="home">처음으로</button>
+        <button class="bigbtn" id="again">한 판 더</button>
+      </div>`);
+    ranked.forEach((r, i) => setTimeout(() => {
+      if (!document.body.contains(s)) return;
+      if (i === 0) { ySfx.fanfare(); yConfetti(); vib([80, 50, 80, 50, 260]); }
+      else { ySfx.blip(n - i); vib(15); }
+    }, (n - 1 - i) * step + 150));
+    s.querySelector('#tbl').onclick = () => yTable(G);
+    s.querySelector('#home').onclick = goHome;
+    s.querySelector('#again').onclick = () => {
+      ySfx.unlock();
+      G = { cur: 0, players: G.players.map(p => ({ ...p, s: {} })) };
+      save(); handoff();
+    };
   }
 }
 
@@ -1014,11 +1772,12 @@ const TRICKS = [
     secret: `<p>처음 6장과 나중 5장은 <b>전부 다른 카드</b>입니다. 사람들은 "자기 카드 한 장"만 기억하기 때문에 나머지가 바뀐 걸 눈치채지 못해요. 그래서 누가 어떤 카드를 골라도 100% 사라집니다.</p><p>💡 팁: 같은 관객에게 <b>두 번 반복하면 들킵니다.</b> 한 방 크게 터뜨리고 다음으로 넘어가세요.</p>`,
   },
   {
-    emoji: '🧐', title: '사라진 거 찾기',
-    tag: { text: '전원 동시', kind: 'group' },
-    desc: '대놓고 사라지는데 아무도 못 찾는다',
-    run: () => trickChange(0),
-    secret: `<p><b>변화맹(change blindness)</b>이라는 현상입니다. 두 장면 사이에 <b>아주 짧은 빈 화면</b>을 끼워 넣는 게 핵심이에요. 빈 화면이 없으면 변화가 '움직임'으로 보여서 0.1초 만에 들키지만, 끼워 넣는 순간 뇌가 변화를 <b>통째로 놓칩니다.</b></p><p>💡 <b>"먼저 찾는 사람 손!"</b>으로 경쟁을 붙이세요. 못 찾을수록 분위기가 달아오릅니다. 30초쯤 지나면 힌트 버튼을 누르세요 — 힌트를 줘도 잘 못 찾는 게 더 웃깁니다.</p><p>💡 찾은 사람은 <b>말하지 말고 손만 들라</b>고 하세요. 한 명이 외쳐버리면 나머지의 재미가 끝납니다.</p><p>💡 3라운드까지 다 하지 않아도 됩니다. 분위기 봐서 2라운드에서 끊고 다음으로 넘어가세요.</p>`,
+    emoji: '🎲', title: '요트 다이스',
+    tag: { text: '폰 돌리기 · 2~6명', kind: 'pass' },
+    desc: '세 번 굴려 족보를 채운다 — 12라운드 한 판',
+    run: trickYacht,
+    secretTitle: '📖 규칙',
+    secret: `<p>차례마다 주사위 5개를 <b>최대 3번</b> 굴립니다. 굴린 뒤 남길 주사위를 탭하면 위쪽 KEEP 칸으로 올라가고, 나머지만 다시 굴러요.</p><p>차례를 마치려면 <b>빈 칸 하나에 반드시 기록</b>합니다. 조건이 안 맞는 칸을 고르면 0점 — 버릴 칸을 잘 고르는 게 실력입니다. 12칸을 다 채우면 끝.</p><table class="ytbl rules"><tbody><tr><td>1 ~ 6</td><td>그 눈의 합</td></tr><tr><td>초이스</td><td>다섯 개의 합</td></tr><tr><td>포 다이스</td><td>같은 눈 4개 이상 → 다섯 개의 합</td></tr><tr><td>풀하우스</td><td>같은 눈 3개 + 2개 → 다섯 개의 합</td></tr><tr><td>S. 스트레이트</td><td>4개 연속 → 15점</td></tr><tr><td>L. 스트레이트</td><td>5개 연속 → 30점</td></tr><tr><td>요트</td><td>다섯 개 모두 같은 눈 → 50점</td></tr></tbody></table><p>💡 1~6 칸의 합이 <b>63점 이상</b>이면 보너스 <b>+35</b>. 모든 눈을 3개씩 모으면 딱 63이에요.</p><p>💡 버튼 대신 <b>폰을 흔들어도</b> 굴러갑니다. 아이폰은 처음에 동작 권한을 물어봐요.</p><p>💡 중간에 나가도 기록한 칸까지는 저장돼서 <b>이어하기</b>로 돌아올 수 있습니다.</p>`,
   },
   {
     emoji: '🧠', title: '없던 기억',
